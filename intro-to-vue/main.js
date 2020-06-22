@@ -18,6 +18,10 @@ Vue.component('product', {
             type: Boolean,
             required: true,
         },
+        cart: {
+            type: Array,
+            required: true,
+        },
     },
     template: `
     <div class="product">
@@ -63,9 +67,7 @@ Vue.component('product', {
         >
           Remove from Cart
         </button>
-        <div>
-          <p>Cart({{ cart }})</p>
-        </div>
+       
       </div>
     </div>
   `,
@@ -79,7 +81,6 @@ Vue.component('product', {
             inventory: 5,
             onSale: true,
             details: ['80% cotton', '20% polyester', 'Gender-neutral'],
-
             variants: [
                 {
                     variantId: 2234,
@@ -91,23 +92,23 @@ Vue.component('product', {
                     variantId: 2235,
                     variantColor: 'blue',
                     variantImage: './assets/blueSocks.jpg',
-                    variantQuantity: 0,
+                    variantQuantity: 2,
                 },
             ],
             sizes: ['xs', 's', 'm', 'l', 'xl'],
-            cart: 0,
         };
     },
     methods: {
         addToCart() {
-            this.cart += 1;
-            this.variants[this.selectedVariant].variantQuantity -= 1;
+            this.$emit('add-to-cart', this.variants[this.selectedVariant].variantId);
         },
         removeFromCart() {
-            if (this.cart > 0) {
-                this.cart -= 1;
-                this.variants[this.selectedVariant].variantQuantity += 1;
-            }
+            this.$emit('remove-from-cart', this.variants[this.selectedVariant].variantId);
+
+            // if (this.cart > 0) {
+            //     this.cart -= 1;
+            //     this.variants[this.selectedVariant].variantQuantity += 1;
+            // }
         },
         updateProduct(index) {
             this.selectedVariant = index;
@@ -141,5 +142,18 @@ var app = new Vue({
     el: '#app',
     data: {
         premium: false,
+        cart: [],
+    },
+    methods: {
+        updateCart(id) {
+            this.cart.push(id);
+            // this.variants[this.selectedVariant].variantQuantity -= 1;
+        },
+        removeFromCart(id) {
+            console.log(id);
+            console.log(this.cart.filter((el) => el !== id));
+            this.cart = this.cart.filter((el) => el !== id);
+            // this.cart.pop();
+        },
     },
 });
