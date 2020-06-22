@@ -6,5 +6,7 @@ var app = new Vue({
   data: {
     product: 'Boots',
     description: 'A lovely pair of boots',
+    image: './assets/greenSocks.jpg',
+    viewMore: 'https://www.amazon.co.uk/Mens-Socks/b?node=1731008031',
   },
 });
