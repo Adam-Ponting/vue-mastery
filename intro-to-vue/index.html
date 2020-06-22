@@ -22,7 +22,20 @@
             Low Stock <span v-show="onSale">&<strong> on Sale!</strong></span>
           </p>
           <p v-else>Out of stock</p>
+
           <a :href="viewMore" target="_blank">View more</a>
+
+          <ul>
+            <li v-for="detail in details">{{ detail }}</li>
+          </ul>
+
+          <ul>
+            <li v-for="size in sizes">{{ size.toUpperCase() }}</li>
+          </ul>
+
+          <div v-for="variant in variants" :key="variant.variantId">
+            <p>{{variant.variantColor}}</p>
+          </div>
         </div>
       </div>
     </div>
