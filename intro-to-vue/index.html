@@ -1,65 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-    <link rel="stylesheet" href="style.css" />
-  </head>
-  <body>
-    <div class="nav-bar"></div>
-    <div id="app">
-      <div class="product">
-        <div class="product-image">
-          <img :src="image" />
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Document</title>
+        <link rel="stylesheet" href="style.css" />
+    </head>
+    <body>
+        <div class="nav-bar"></div>
+        <div id="app">
+            <product :premium="premium"> </product>
         </div>
 
-        <div class="product-info">
-          <h1>{{ title }}</h1>
-          <p>{{ description }}</p>
-          <p>{{ onSaleMessage }}</p>
-          <p v-if="inStock > 10">In stock</p>
-          <p v-else-if="inStock <= 10 && inStock > 0">
-            Low Stock <span v-show="onSale">&<strong> on Sale!</strong></span>
-          </p>
-          <p v-else :class="{ outOfStock: !inStock }">Out of stock</p>
-
-          <a :href="viewMore" target="_blank">View more</a>
-
-          <ul>
-            <li v-for="detail in details">{{ detail }}</li>
-          </ul>
-
-          <ul>
-            <li v-for="size in sizes">{{ size.toUpperCase() }}</li>
-          </ul>
-
-          <div
-            v-for="(variant, index) in variants"
-            :key="variant.variantId"
-            class="color-box"
-            :style="{ backgroundColor: variant.variantColor }"
-            @mouseover="updateProduct(index)"
-          ></div>
-
-          <button @click="addToCart" :disabled="!inStock" :class="{ disabledButton: !inStock }">
-            Add to Cart
-          </button>
-          <button
-            @click="removeFromCart"
-            :disabled="cart === 0"
-            :class="{ disabledButton: cart === 0 }"
-          >
-            Remove from Cart
-          </button>
-          <div>
-            <p>Cart({{ cart }})</p>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/vue@2.5.13/dist/vue.js"></script>
-    <script src="./main.js"></script>
-  </body>
+        <script src="https://cdn.jsdelivr.net/npm/vue@2.5.13/dist/vue.js"></script>
+        <script src="./main.js"></script>
+    </body>
 </html>
