@@ -15,13 +15,14 @@
         </div>
 
         <div class="product-info">
-          <h1>{{ product }}</h1>
+          <h1>{{ title }}</h1>
           <p>{{ description }}</p>
-          <p v-if="inventory > 10">In stock</p>
-          <p v-else-if="inventory <= 10 && inventory > 0">
+          <p>{{ onSaleMessage }}</p>
+          <p v-if="inStock > 10">In stock</p>
+          <p v-else-if="inStock <= 10 && inStock > 0">
             Low Stock <span v-show="onSale">&<strong> on Sale!</strong></span>
           </p>
-          <p v-else>Out of stock</p>
+          <p v-else :class="{ outOfStock: !inStock }">Out of stock</p>
 
           <a :href="viewMore" target="_blank">View more</a>
 
@@ -33,12 +34,24 @@
             <li v-for="size in sizes">{{ size.toUpperCase() }}</li>
           </ul>
 
-          <div v-for="variant in variants" :key="variant.variantId">
-            <p @mouseover="updateProduct(variant.variantImage)">{{ variant.variantColor }}</p>
-          </div>
+          <div
+            v-for="(variant, index) in variants"
+            :key="variant.variantId"
+            class="color-box"
+            :style="{ backgroundColor: variant.variantColor }"
+            @mouseover="updateProduct(index)"
+          ></div>
 
-          <button @click="addToCart">Add to Cart</button>
-          <button @click="removeFromCart">Remove from Cart</button>
+          <button @click="addToCart" :disabled="!inStock" :class="{ disabledButton: !inStock }">
+            Add to Cart
+          </button>
+          <button
+            @click="removeFromCart"
+            :disabled="cart === 0"
+            :class="{ disabledButton: cart === 0 }"
+          >
+            Remove from Cart
+          </button>
           <div>
             <p>Cart({{ cart }})</p>
           </div>
