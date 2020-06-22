@@ -1,4 +1,81 @@
-Vue.component('productDetails', {
+Vue.component('product-review', {
+    template: `
+        <form class="review-form" @submit.prevent="onSubmit">
+            <p v-if="errors.length">
+                <strong>Please correct the following error(s):</strong>
+                <ul>
+                    <li v-for="error in errors">{{ error }}</li>
+                </ul>
+            </p>
+            <p>
+                <label for="name">Name:</label>
+                <input id="name" v-model="name" placeholder="name">
+            </p>
+            
+            <p>
+                <label for="review">Review:</label>      
+                <textarea id="review" v-model="review"></textarea>
+            </p>
+            
+            <p>
+                <label for="rating">Rating:</label>
+                <select id="rating" v-model.number="rating">
+                    <option>5</option>
+                    <option>4</option>
+                    <option>3</option>
+                    <option>2</option>
+                    <option>1</option>
+                </select>
+            </p>
+            <p> 
+                Would you recommend this product?
+                <input type="radio" name="recommend" value="yes" id="yes" v-model="picked" />
+                <label for="yes">Yes</label>
+                <input type="radio" name="recommend" value="no" id="no" v-model="picked" />
+                <label for="no">No</label>
+            </p>
+                
+            <p>
+                <input type="submit" value="Submit">  
+            </p>    
+    
+        </form>
+    `,
+    data() {
+        return {
+            name: null,
+            review: null,
+            rating: null,
+            picked: null,
+            errors: [],
+        };
+    },
+    methods: {
+        onSubmit() {
+            this.errors = [];
+            if (this.name && this.review && this.rating && this.picked) {
+                const productReview = {
+                    name: this.name,
+                    review: this.review,
+                    rating: this.rating,
+                    recommend: this.picked,
+                };
+                this.$emit('review-submitted', productReview);
+                this.name = null;
+                this.review = null;
+                this.rating = null;
+                this.picked = null;
+            } else {
+                if (!this.name) this.errors.push('Name required');
+                if (!this.review) this.errors.push('Review required');
+                if (!this.rating) this.errors.push('Rating required');
+                if (!this.picked) this.errors.push('Recommendation required');
+            }
+        },
+    },
+});
+
+Vue.component('product-details', {
     props: {
         details: {
             type: Array,
@@ -42,7 +119,7 @@ Vue.component('product', {
         <p>Shipping fee: {{ shipping }}</p>
 
         <a :href="viewMore" target="_blank">View more</a>
-        <productDetails :details="details"></productDetails>
+        <product-details :details="details"></product-details>
        
 
         <ul>
@@ -68,7 +145,22 @@ Vue.component('product', {
           Remove from Cart
         </button>
        
-      </div>
+        </div>
+
+        <div>
+            <h2>Reviews:</h2>
+            <p v-if="!reviews.length">There are no reviews yet.</p>
+            <ul>
+                <li v-for="review in reviews">
+                    <p>Name: {{ review.name }}</p> 
+                    <p>Review: {{ review.review }}</p> 
+                    <p>Rating: {{ review.rating }}</p> 
+                    <p>Rating: {{ review.recommend }}</p> 
+                </li>
+            </ul>
+        </div>
+
+        <product-review @review-submitted="addReview"></product-review>
     </div>
   `,
     data() {
@@ -96,6 +188,7 @@ Vue.component('product', {
                 },
             ],
             sizes: ['xs', 's', 'm', 'l', 'xl'],
+            reviews: [],
         };
     },
     methods: {
@@ -112,6 +205,9 @@ Vue.component('product', {
         },
         updateProduct(index) {
             this.selectedVariant = index;
+        },
+        addReview(review) {
+            this.reviews.push(review);
         },
     },
     computed: {
