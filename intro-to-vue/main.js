@@ -8,5 +8,33 @@ var app = new Vue({
     description: 'A lovely pair of boots',
     image: './assets/greenSocks.jpg',
     viewMore: 'https://www.amazon.co.uk/Mens-Socks/b?node=1731008031',
+    inventory: 9,
+    onSale: true,
+    details: ['80% cotton', '20% polyester', 'Gender-neutral'],
+    variants: [
+      {
+        variantId: 2234,
+        variantColor: 'green',
+        variantImage: './assets/greenSocks.jpg',
+      },
+      {
+        variantId: 2235,
+        variantColor: 'blue',
+        variantImage: './assets/blueSocks.jpg',
+      },
+    ],
+    sizes: ['xs', 's', 'm', 'l', 'xl'],
+    cart: 0,
+  },
+  methods: {
+    addToCart() {
+      this.cart += 1;
+    },
+    removeFromCart() {
+      this.cart -= 1;
+    },
+    updateProduct(image) {
+      this.image = image;
+    },
   },
 });
