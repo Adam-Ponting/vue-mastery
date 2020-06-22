@@ -117,11 +117,8 @@ Vue.component('product', {
           Low Stock <span v-show="onSale">&<strong> on Sale!</strong></span>
         </p>
         <p v-else :class="{ outOfStock: !inStock }">Out of stock</p>
-        <p>User is premium: {{ premium }}</p>
-        <p>Shipping fee: {{ shipping }}</p>
 
         <a :href="viewMore" target="_blank">View more</a>
-        <product-details :details="details"></product-details>
        
 
         <ul>
@@ -149,7 +146,7 @@ Vue.component('product', {
        
         </div>
 
-        <product-tabs :reviews="reviews"></product-tabs>
+        <product-tabs :reviews="reviews" :shipping="shipping" :premium="premium" :details="details"></product-tabs>
 
        
     </div>
@@ -233,6 +230,18 @@ Vue.component('product-tabs', {
             type: Array,
             required: true,
         },
+        shipping: {
+            type: String,
+            required: true,
+        },
+        premium: {
+            type: Boolean,
+            required: true,
+        },
+        details: {
+            type: Array,
+            required: true,
+        },
     },
     template: `
         <div>
@@ -257,13 +266,19 @@ Vue.component('product-tabs', {
                 </ul>
             </div>
 
-        <product-review v-show="selectedTab === 'Make a Review'"></product-review>
+            <product-review v-show="selectedTab === 'Make a Review'"></product-review>
+            
+            <p v-show="selectedTab === 'Shipping'">User is premium: {{ premium }}</p>
+            <p v-show="selectedTab === 'Shipping'">Shipping fee: {{ shipping }}</p>
+            <product-details :details="details"></product-details>
+
+    
 
         </div>
     `,
     data() {
         return {
-            tabs: ['Reviews', 'Make a Review'],
+            tabs: ['Reviews', 'Make a Review', 'Shipping', 'Details'],
             selectedTab: 'Reviews',
         };
     },
